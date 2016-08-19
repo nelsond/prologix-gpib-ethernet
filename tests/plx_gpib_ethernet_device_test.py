@@ -1,7 +1,6 @@
 from plx_gpib_ethernet import PrologixGPIBEthernetDevice
 
 # .__init__
-
 def test_it_sets_address():
     device = PrologixGPIBEthernetDevice(host='example.com', address=10)
 
