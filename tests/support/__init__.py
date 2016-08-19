@@ -1,1 +1,1 @@
-from mock_socket import MockSocket
+from .mock_socket import MockSocket
