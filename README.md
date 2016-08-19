@@ -88,11 +88,11 @@ $ pip install -r requirements/dev.txt
 Run tests
 
 ```shell
-$ py.test test/
+$ py.test tests/
 ```
 
 Generate coverage report
 
 ```shell
-$ py.test --cov=plx_gpib_ethernet test/
+$ py.test --cov=plx_gpib_ethernet tests/
 ```
