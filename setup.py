@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 from setuptools import setup, find_packages
+import os
+
+current_path = os.path.dirname(os.path.abspath(__file__))
 
 try:
     long_description = open('README.rst').read()
@@ -7,11 +10,8 @@ except IOError:
     long_description = ''
 
 # Get the long description from the README file
-with open(path.join(here, 'README.md'), encoding='utf-8') as f:
+with open(os.path.join(current_path, 'README.md')) as f:
     long_description = f.read()
-
-with open(path.join(here, 'requirements.txt'), encoding='utf-8') as f:
-    required = f.read().splitlines()
 
 setup(
     name='prologix-gpib-ethernet',
@@ -42,5 +42,5 @@ setup(
 
     packages=['plx_gpib_ethernet'],
 
-    install_requires=required,
+    install_requires=[],
 )
