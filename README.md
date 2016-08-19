@@ -79,7 +79,7 @@ mydevice.close()
 
 ## Development
 
-Install requirements for development environment.
+Install requirements for development environment
 
 ```shell
 $ pip install -r requirements/dev.txt
