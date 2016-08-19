@@ -8,7 +8,7 @@ GPIB-to-Ethernet adapter.**
 
 ## Requirements
 
-Make sure you can reach/ping adapter before you start using this
+Make sure you can reach/ping the adapter before you start using this
 library.
 
 ## Install
