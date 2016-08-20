@@ -13,7 +13,7 @@ library.
 
 ## Install
 
-Use pip to install:
+Install with pip
 
 ```shell
 pip install git+git://github.com/nelsond/prologix-gpib-ethernet.git
@@ -31,7 +31,7 @@ gpib = PrologixGPIBEthernet('192.168.1.14')
 # open connection to Prologix GPIB-to-Ethernet adapter
 gpib.connect()
 
-# select gpib device on at 10
+# select gpib device at address 10
 gpib.select(10)
 
 # send a query
