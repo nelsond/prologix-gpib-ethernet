@@ -1,2 +1,5 @@
+v 0.1.1
+	- Fix socket issue on Python 3
+
 v 0.1.0
 	- initial release
