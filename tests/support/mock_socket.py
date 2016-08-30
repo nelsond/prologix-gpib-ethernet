@@ -18,7 +18,9 @@ class MockSocket:
         self.closed = True
 
     def send(self, value):
-        self.out_buffer.append(value)
+        assert type(value) == bytes
+        self.out_buffer.append(value.decode('ascii'))
 
     def recv(self, byte_num):
-        return self.in_buffer.pop()
+        value = self.in_buffer.pop()
+        return value.encode('ascii')

@@ -35,10 +35,12 @@ class PrologixGPIBEthernet:
         return self.read(buffer_size)
 
     def _send(self, value):
-        self.socket.send('%s\n' % value)
+        encoded_value = ('%s\n' % value).encode('ascii')
+        self.socket.send(encoded_value)
 
     def _recv(self, byte_num):
-        return self.socket.recv(byte_num)
+        value = self.socket.recv(byte_num)
+        return value.decode('ascii')
 
     def _setup(self):
         # set device to CONTROLLER mode
