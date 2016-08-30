@@ -19,7 +19,7 @@ class MockSocket:
 
     def send(self, value):
         assert type(value) == bytes
-        self.out_buffer.append(value)
+        self.out_buffer.append(value.decode('ascii'))
 
     def recv(self, byte_num):
         value = self.in_buffer.pop()
