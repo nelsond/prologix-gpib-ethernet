@@ -41,3 +41,6 @@ docs/_build/
 
 # pyenv
 .python-version
+
+# py.test
+pytest-local.py
