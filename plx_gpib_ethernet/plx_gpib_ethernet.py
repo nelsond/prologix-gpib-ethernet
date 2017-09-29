@@ -1,5 +1,6 @@
 import socket
 
+
 class PrologixGPIBEthernet:
     PORT = 1234
 
@@ -13,7 +14,7 @@ class PrologixGPIBEthernet:
         self.socket.settimeout(self.timeout)
 
     def connect(self):
-        self.socket.connect( (self.host, self.PORT) )
+        self.socket.connect((self.host, self.PORT))
 
         self._setup()
 
@@ -21,7 +22,7 @@ class PrologixGPIBEthernet:
         self.socket.close()
 
     def select(self, addr):
-        self._send( '++addr %i' % int(addr) )
+        self._send('++addr %i' % int(addr))
 
     def write(self, cmd):
         self._send(cmd)
@@ -50,7 +51,7 @@ class PrologixGPIBEthernet:
         self._send('++auto 0')
 
         # set GPIB timeout
-        self._send( '++read_tmo_ms %i' % int(self.timeout*1e3) )
+        self._send('++read_tmo_ms %i' % int(self.timeout*1e3))
 
         # do not require CR or LF appended to GPIB data
         self._send('++eos 3')

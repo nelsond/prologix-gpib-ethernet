@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from setuptools import setup, find_packages
+from setuptools import setup
 import os
 
 current_path = os.path.dirname(os.path.abspath(__file__))

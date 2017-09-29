@@ -1,5 +1,6 @@
 from plx_gpib_ethernet import PrologixGPIBEthernet
 
+
 class PrologixGPIBEthernetDevice:
     def __init__(self, address, *args, **kwargs):
         self.address = address
