@@ -1,4 +1,4 @@
-# Prologix GPIB-to-Ethernet Python wrapper [![Build Status](https://travis-ci.org/nelsond/prologix-gpib-ethernet.svg?branch=master)](https://travis-ci.org/nelsond/prologix-gpib-ethernet)
+# Prologix GPIB-to-Ethernet Python wrapper [![Build Status](https://travis-ci.org/nelsond/prologix-gpib-ethernet.svg?branch=master)](https://travis-ci.org/nelsond/prologix-gpib-ethernet) [![Build status](https://ci.appveyor.com/api/projects/status/5xg4cwnyh5y0sk2e/branch/master?svg=true)](https://ci.appveyor.com/project/nelsond/prologix-gpib-ethernet/branch/master)
 
 Simple wrapper for the Prologix GPIB-to-Ethernet adapter. Also includes
 a simple device wrapper class.
