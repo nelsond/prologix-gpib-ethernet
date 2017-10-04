@@ -1,13 +1,9 @@
 # -*- coding: utf-8 -*-
 from setuptools import setup
 import os
+from plx_gpib_ethernet import __version__
 
 current_path = os.path.dirname(os.path.abspath(__file__))
-
-try:
-    long_description = open('README.rst').read()
-except IOError:
-    long_description = ''
 
 # Get the long description from the README file
 with open(os.path.join(current_path, 'README.md')) as f:
@@ -16,8 +12,7 @@ with open(os.path.join(current_path, 'README.md')) as f:
 setup(
     name='prologix-gpib-ethernet',
 
-    use_scm_version=True,
-    setup_requires=['setuptools_scm'],
+    version=__version__,
 
     description='Simple wrapper for the Prologix GPIB-to-Ethernet adapter.',
     long_description=long_description,
