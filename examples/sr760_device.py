@@ -1,4 +1,5 @@
 from plx_gpib_ethernet import PrologixGPIBEthernetDevice
+from time import sleep
 
 
 class SR760Device(PrologixGPIBEthernetDevice):
@@ -6,6 +7,16 @@ class SR760Device(PrologixGPIBEthernetDevice):
                   97.5, 195, 390, 780, 1.56e3, 3.125e3, 6.25e3, 12.5e3, 25e3,
                   50e3, 100e3]
     NUM_BINS = 400
+    QUERY_SLEEP = 0.1
+
+    def query(self, cmd, buffer_size=1024*1024):
+        self.write(cmd)
+        sleep(self.QUERY_SLEEP)
+        return self.read(buffer_size)
+
+    def fast_query(self, cmd, buffer_size=1024*1024):
+        self.write(cmd)
+        return self.read(buffer_size)
 
     def start(self):
         self.write('STRT')
@@ -14,19 +25,19 @@ class SR760Device(PrologixGPIBEthernetDevice):
         self.write('STCO')
 
     def get_unit(self, trace=0):
-        i = int(self.query('UNIT? %i' % trace))
+        i = int( self.query('UNIT? %i' % trace) )
         return self.int_to_unit(i)
 
     def set_unit(self, u, trace=0):
-        self.write('UNIT %s,%i' % (trace, self.unit_to_int(u)))
+        self.write( 'UNIT %s,%i' % ( trace, self.unit_to_int(u)) )
 
     def get_meas_type(self, trace=0):
-        i = int(self.query('MEAS? %i' % trace))
+        i = int( self.query('MEAS? %i' % trace) )
         return self.int_to_meas_type(i)
 
     def set_meas_type(self, t, trace=0):
         i = self.meas_type_to_int(t)
-        self.write('MEAS %i,%s' (trace, i))
+        self.write( 'MEAS %i,%s' (trace, i) )
 
     def get_start_freq(self):
         return self._get_freq('STRF')
@@ -41,7 +52,7 @@ class SR760Device(PrologixGPIBEthernetDevice):
         self._set_freq('CTRF', freq)
 
     def get_span(self):
-        i = int(self.query('SPAN?'))
+        i = int( self.query('SPAN?') )
         return self.span_level_to_freq(i)
 
     def set_span(self, freq):
@@ -51,7 +62,7 @@ class SR760Device(PrologixGPIBEthernetDevice):
     def dump(self, trace=0):
         data = []
         for i in range(SR760Device.NUM_BINS):
-            data.append(self._dump_bin(trace, i))
+            data.append( self._dump_bin(trace, i) )
 
         return data
 
@@ -63,11 +74,11 @@ class SR760Device(PrologixGPIBEthernetDevice):
         return float(v)
 
     def _set_freq(self, cmd, freq):
-        self.write('%s %e' % (cmd, freq))
+        self.write( '%s %e' % (cmd, freq) )
 
     def _dump_bin(self, trace, nbin=0):
-        x = float(self.query('BVAL? %i, %i' % (trace, nbin)))
-        y = float(self.query('SPEC? %i, %i' % (trace, nbin)))
+        x = float( self.fast_query('BVAL? %i, %i' % (trace, nbin)) )
+        y = float( self.fast_query('SPEC? %i, %i' % (trace, nbin)) )
 
         return [x, y]
 
@@ -75,7 +86,7 @@ class SR760Device(PrologixGPIBEthernetDevice):
     def int_to_unit(i):
         if (i == 0):
             return 'VPk'
-        elif (i == 1):
+        elif (i== 1):
             return 'Vrms'
         elif (i == 2):
             return 'dBV'
@@ -100,37 +111,36 @@ class SR760Device(PrologixGPIBEthernetDevice):
     @staticmethod
     def int_to_meas_type(i):
         if (i == 0):
-            return 'spectrum'
+            return 'Spectrum'
         elif (i == 1):
-            return 'psd'
+            return 'PSD'
         elif (i == 2):
-            return 'time'
+            return 'Time'
         elif (i == 3):
-            return 'octave'
+            return 'Octave'
 
         return None
 
     @staticmethod
     def meas_type_to_int(t):
-        if (t == 'spectrum'):
+        if (t == 'Spectrum'):
             return 0
-        elif (t == 'psd'):
+        elif (t == 'PSD'):
             return 1
-        elif (t == 'time'):
+        elif (t == 'Time'):
             return 2
-        elif (t == 'octave'):
+        elif (t == 'Octave'):
             return 3
 
         return 0
 
     @staticmethod
     def span_level_to_freq(l):
-        return SR760Device.SPAN_FREQS[l]
+        return SR760Device.SPAN_FREQS[l];
 
     @staticmethod
     def freq_to_span_level(f):
         for i, sf in enumerate(SR760Device.SPAN_FREQS):
-            if f <= sf:
-                return i
+            if f <= sf: return i
 
         return len(SR760Device.SPAN_FREQS) - 1
