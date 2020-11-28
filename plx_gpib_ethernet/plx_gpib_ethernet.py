@@ -28,11 +28,12 @@ class PrologixGPIBEthernet:
         self._send(cmd)
 
     def read(self, num_bytes=1024):
-        self._send('++read eoi')
         return self._recv(num_bytes)
 
     def query(self, cmd, buffer_size=1024*1024):
         self.write(cmd)
+        if(cmd.startswith('++') == False):
+            self._send('++read eoi')
         return self.read(buffer_size)
 
     def _send(self, value):
