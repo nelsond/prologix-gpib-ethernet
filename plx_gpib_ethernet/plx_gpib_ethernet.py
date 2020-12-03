@@ -4,9 +4,11 @@ import socket
 class PrologixGPIBEthernet:
     PORT = 1234
 
-    def __init__(self, host, timeout=1):
+    def __init__(self, host, timeout=1.):
         self.host = host
-        self.timeout = timeout
+
+        # Prologix's read_tmo_ms only accepts timeouts <=3000ms
+        self.timeout = min(timeout, 3.)
 
         self.socket = socket.socket(socket.AF_INET,
                                     socket.SOCK_STREAM,
