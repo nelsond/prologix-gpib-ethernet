@@ -1,10 +1,10 @@
 from plx_gpib_ethernet import PrologixGPIBEthernet
-from pytest import fixture
+import pytest
 from support import MockSocket
 from random import randint
 
 
-@fixture
+@pytest.fixture
 def plx_with_mock_socket():
     plx = PrologixGPIBEthernet('example.com')
     plx.socket = MockSocket('example.com', 1234)
@@ -36,6 +36,12 @@ def test_it_uses_custom_timeout():
     plx = PrologixGPIBEthernet('example.com', timeout=0.5)
 
     assert plx.timeout == 0.5
+
+
+def test_it_raises_value_error_for_invalid_timeout():
+    for invalid_timeout in (1e-3 - 1e-12, 3 + 1e-12):
+        with pytest.raises(ValueError):
+            PrologixGPIBEthernet('example.com', timeout=invalid_timeout)
 
 
 # .connect

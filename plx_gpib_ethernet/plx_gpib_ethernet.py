@@ -4,11 +4,14 @@ import socket
 class PrologixGPIBEthernet:
     PORT = 1234
 
-    def __init__(self, host, timeout=1.):
-        self.host = host
+    def __init__(self, host, timeout=1):
+        # see user manual for details on accepted timeout values
+        # https://prologix.biz/downloads/PrologixGpibEthernetManual.pdf#page=13
+        if timeout < 1e-3 or timeout > 3:
+            raise ValueError('Timeout must be >= 1e-3 (1ms) and <= 3 (3s)')
 
-        # Prologix's read_tmo_ms only accepts timeouts <=3000ms
-        self.timeout = min(timeout, 3.)
+        self.host = host
+        self.timeout = timeout
 
         self.socket = socket.socket(socket.AF_INET,
                                     socket.SOCK_STREAM,
