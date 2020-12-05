@@ -140,3 +140,26 @@ def test_it_reads_gpib_query_response(plx_with_mock_socket):
     result = plx.query('*IDN?')
 
     assert result == response
+
+
+# .query_controller
+def test_it_sends_controller_query(plx_with_mock_socket):
+    plx, mock_socket = plx_with_mock_socket
+    plx.connect()
+
+    mock_socket.in_buffer.append('\n')
+    plx.query_controller('++addr')
+
+    expected_commands = ['++addr\n']
+    assert mock_socket.out_buffer[-1:] == expected_commands
+
+
+def test_it_reads_controller_query_response(plx_with_mock_socket):
+    plx, mock_socket = plx_with_mock_socket
+    plx.connect()
+
+    response = '2\n'
+    mock_socket.in_buffer.append(response)
+    result = plx.query_controller('++addr')
+
+    assert result == response

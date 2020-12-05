@@ -40,6 +40,10 @@ class PrologixGPIBEthernet:
         self.write(cmd)
         return self.read(buffer_size)
 
+    def query_controller(self, cmd, buffer_size=1024*1024):
+        self._send(cmd)
+        return self._recv(buffer_size)
+
     def _send(self, value):
         encoded_value = ('%s\n' % value).encode('ascii')
         self.socket.send(encoded_value)
