@@ -96,3 +96,7 @@ Generate coverage report
 ```shell
 $ py.test --cov=plx_gpib_ethernet tests/
 ```
+
+## License
+
+MIT License, see file `LICENSE`.
