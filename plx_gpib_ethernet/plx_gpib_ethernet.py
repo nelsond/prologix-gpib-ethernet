@@ -10,13 +10,9 @@ class PrologixGPIBEthernet:
         self.socket = socket.socket(socket.AF_INET,
                                     socket.SOCK_STREAM,
                                     socket.IPPROTO_TCP)
-<<<<<<< HEAD
         self.timeout = 0
         self.set_timeout(timeout)
-=======
-        self.socket.settimeout(self.timeout)
         self._read_mode = self.read_modes[0]
->>>>>>> data_mode
 
     def connect(self):
         self.socket.connect((self.host, self.PORT))
