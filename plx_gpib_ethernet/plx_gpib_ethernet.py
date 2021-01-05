@@ -2,6 +2,7 @@ import socket
 
 
 class PrologixGPIBEthernet:
+    read_modes = ("ascii", "binary")
     PORT = 1234
 
     def __init__(self, host, timeout=1):
@@ -17,10 +18,10 @@ class PrologixGPIBEthernet:
                                     socket.SOCK_STREAM,
                                     socket.IPPROTO_TCP)
         self.socket.settimeout(self.timeout)
+        self._read_mode = self.read_modes[0]
 
     def connect(self):
         self.socket.connect((self.host, self.PORT))
-
         self._setup()
 
     def close(self):
@@ -40,13 +41,29 @@ class PrologixGPIBEthernet:
         self.write(cmd)
         return self.read(buffer_size)
 
+    @property
+    def read_mode(self):
+        return self._read_mode
+
+    @read_mode.setter
+    def read_mode(self, mode):
+        if mode not in self.read_modes:
+            raise ValueError(f"Invalid read mode {mode}, must be one of {self.read_modes}")
+        self._read_mode = mode
+
     def _send(self, value):
         encoded_value = ('%s\n' % value).encode('ascii')
         self.socket.send(encoded_value)
 
+    def _decode(self, value):
+        if self.read_mode == "ascii":
+            return value.decode("ascii")
+        elif self.read_mode == "binary":
+            return value
+
     def _recv(self, byte_num):
         value = self.socket.recv(byte_num)
-        return value.decode('ascii')
+        return self._decode(value)
 
     def _setup(self):
         # set device to CONTROLLER mode

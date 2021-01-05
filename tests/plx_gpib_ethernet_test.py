@@ -44,6 +44,26 @@ def test_it_raises_value_error_for_invalid_timeout():
             PrologixGPIBEthernet('example.com', timeout=invalid_timeout)
 
 
+# .read_mode
+def test_it_has_default_read_mode_ascii():
+    plx = PrologixGPIBEthernet('example.com')
+    assert plx.read_mode == "ascii"
+
+
+def test_it_uses_custom_read_mode():
+    plx = PrologixGPIBEthernet('example.com')
+    setting = "binary"
+    plx.read_mode = setting
+    assert plx.read_mode == setting
+
+
+def test_it_raises_value_error_for_invalid_read_mode():
+    plx = PrologixGPIBEthernet('example.com')
+    setting = "abcdefg"
+    with pytest.raises(ValueError):
+        plx.read_mode = setting
+
+
 # .connect
 def test_it_connects(plx_with_mock_socket):
     plx, mock_socket = plx_with_mock_socket
@@ -108,8 +128,9 @@ def test_it_sends_read_command(plx_with_mock_socket):
     assert mock_socket.out_buffer[-1] == expected_command
 
 
-def test_it_read_gpib_response(plx_with_mock_socket):
+def test_it_read_gpib_response_ascii(plx_with_mock_socket):
     plx, mock_socket = plx_with_mock_socket
+    plx.read_mode = "ascii"
     plx.connect()
 
     response = 'Hello World!\n'
@@ -117,6 +138,19 @@ def test_it_read_gpib_response(plx_with_mock_socket):
     result = plx.read()
 
     assert result == response
+
+def test_it_read_gpib_response_binary(plx_with_mock_socket):
+    plx, mock_socket = plx_with_mock_socket
+    plx.read_mode = "binary"
+    plx.connect()
+
+    response = 'Hello World!\n'
+    response_bytes = bytes(response, encoding="ascii")
+    mock_socket.in_buffer.append(response)
+    result = plx.read()
+
+    assert result != response
+    assert result == response_bytes
 
 
 # .query
