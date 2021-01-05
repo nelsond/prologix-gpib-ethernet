@@ -2,21 +2,28 @@ import socket
 
 
 class PrologixGPIBEthernet:
-    read_modes = ("ascii", "binary")
     PORT = 1234
 
     def __init__(self, host, timeout=1):
+        # see user manual for details on accepted timeout values
+        # https://prologix.biz/downloads/PrologixGpibEthernetManual.pdf#page=13
+
         self.host = host
+        self.timeout = 0
         self.socket = socket.socket(socket.AF_INET,
                                     socket.SOCK_STREAM,
                                     socket.IPPROTO_TCP)
-<<<<<<< HEAD
-        self.timeout = 0
         self.set_timeout(timeout)
-=======
+        self._read_mode = "ascii"
+
+    def set_mode(self, mode):
+        self._read_mode = mode
+
+    def set_timeout(self, value):
+        if timeout < 1e-3 or timeout > 3:
+            raise ValueError('Timeout must be >= 1e-3 (1ms) and <= 3 (3s)')
+        self.timeout = value
         self.socket.settimeout(self.timeout)
-        self._read_mode = self.read_modes[0]
->>>>>>> data_mode
 
     def connect(self):
         self.socket.connect((self.host, self.PORT))
@@ -39,32 +46,14 @@ class PrologixGPIBEthernet:
         self.write(cmd)
         return self.read(buffer_size)
 
-    def set_timeout(self, timeout):
-        # see user manual for details on accepted timeout values
-        # https://prologix.biz/downloads/PrologixGpibEthernetManual.pdf#page=13
-        if timeout < 1e-3 or timeout > 3:
-            raise ValueError('Timeout must be >= 1e-3 (1ms) and <= 3 (3s)')
-        self.timeout = timeout
-        self.socket.settimeout(self.timeout)
-
-    @property
-    def read_mode(self):
-        return self._read_mode
-
-    @read_mode.setter
-    def read_mode(self, mode):
-        if mode not in self.read_modes:
-            raise ValueError(f"Invalid read mode {mode}, must be one of {self.read_modes}")
-        self._read_mode = mode
-
     def _send(self, value):
         encoded_value = ('%s\n' % value).encode('ascii')
         self.socket.send(encoded_value)
 
     def _decode(self, value):
-        if self.read_mode == "ascii":
+        if self._read_mode == "ascii":
             return value.decode("ascii")
-        elif self.read_mode == "binary":
+        elif self._read_mode == "binary":
             return value
 
     def _recv(self, byte_num):
