@@ -39,6 +39,7 @@ class PrologixGPIBEthernet:
         # https://prologix.biz/downloads/PrologixGpibEthernetManual.pdf#page=13
         if timeout < 1e-3 or timeout > 3:
             raise ValueError('Timeout must be >= 1e-3 (1ms) and <= 3 (3s)')
+
         self.timeout = timeout
         self.socket.settimeout(self.timeout)
 
