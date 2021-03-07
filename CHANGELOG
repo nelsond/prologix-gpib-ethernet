@@ -1,4 +1,4 @@
-v 0.2.0 (unreleased)
+v 0.2.0
 	- [FIX] Check valid range (1ms - 3s) of timeout argument in PrologixGPIBEthernet.__init__
 	- [FEATURE] Add PrologixGPIBEthernet.set_timeout for dynamically setting timeout
 
