@@ -148,4 +148,4 @@ def test_it_sets_custom_timeout(plx_with_mock_socket):
     timeout = 2 + (randint(0, 10) / 10)
     plx.set_timeout(timeout)
 
-    assert plx.timeout == 2
+    assert plx.timeout == timeout
