@@ -9,6 +9,8 @@ class MockSocket:
         self.out_buffer = []
         self.in_buffer = []
 
+        self.timeout = None
+
     def connect(self, addr):
         if addr == (self.host, self.port):
             self.connected = True
@@ -24,3 +26,6 @@ class MockSocket:
     def recv(self, byte_num):
         value = self.in_buffer.pop()
         return value.encode('ascii')
+
+    def settimeout(self, timeout):
+        self.timeout = timeout
