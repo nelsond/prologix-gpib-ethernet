@@ -140,3 +140,12 @@ def test_it_reads_gpib_query_response(plx_with_mock_socket):
     result = plx.query('*IDN?')
 
     assert result == response
+
+
+# .set_timeout
+def test_it_sets_custom_timeout(plx_with_mock_socket):
+    plx, _ = plx_with_mock_socket
+    timeout = 2 + (randint(0, 10) / 10)
+    plx.set_timeout(timeout)
+
+    assert plx.timeout == timeout

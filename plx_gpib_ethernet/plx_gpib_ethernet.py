@@ -5,18 +5,12 @@ class PrologixGPIBEthernet:
     PORT = 1234
 
     def __init__(self, host, timeout=1):
-        # see user manual for details on accepted timeout values
-        # https://prologix.biz/downloads/PrologixGpibEthernetManual.pdf#page=13
-        if timeout < 1e-3 or timeout > 3:
-            raise ValueError('Timeout must be >= 1e-3 (1ms) and <= 3 (3s)')
-
         self.host = host
-        self.timeout = timeout
-
         self.socket = socket.socket(socket.AF_INET,
                                     socket.SOCK_STREAM,
                                     socket.IPPROTO_TCP)
-        self.socket.settimeout(self.timeout)
+        self.timeout = 0
+        self.set_timeout(timeout)
 
     def connect(self):
         self.socket.connect((self.host, self.PORT))
@@ -39,6 +33,15 @@ class PrologixGPIBEthernet:
     def query(self, cmd, buffer_size=1024*1024):
         self.write(cmd)
         return self.read(buffer_size)
+
+    def set_timeout(self, timeout):
+        # see user manual for details on accepted timeout values
+        # https://prologix.biz/downloads/PrologixGpibEthernetManual.pdf#page=13
+        if timeout < 1e-3 or timeout > 3:
+            raise ValueError('Timeout must be >= 1e-3 (1ms) and <= 3 (3s)')
+
+        self.timeout = timeout
+        self.socket.settimeout(self.timeout)
 
     def _send(self, value):
         encoded_value = ('%s\n' % value).encode('ascii')
